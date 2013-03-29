@@ -1,4 +1,4 @@
 Calc
 ====
 
-clac with scalability
+calc with scalability

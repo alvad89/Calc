@@ -10,7 +10,7 @@ import java.util.List;
 
 
 /**
- *
+ * Выражение со скобками не поддерживается, не правильно считает если первое в выражении отрицательное число
  * User: a1
  * Date: 29.03.13
  * Time: 8:56
@@ -24,15 +24,15 @@ public class OperationImpl implements Operation{
         List<Double> expr = new ArrayList<Double>();
         List<Character> action = new ArrayList<Character>();
         exprOne = 0;
-        exprTwo = 0;
+
         try {
             while((all=inp.readLine()) !=null && !all.equals("")){
 
-
-                for (String a: all.split("[+ * \\- / ]")){
+                //сохраним все цифры в массив по порядку
+                for (String a: all.split("[+ * \\- / ( )]")){
                      if (a.length()>0)expr.add(Double.valueOf(a));
                 }
-                System.out.println(expr);
+                //сохраним все действия по порядку
                 for (String a: all.split("[0-9]")){
                     if(a.length()>0) action.add(a.charAt(0));
 
@@ -42,6 +42,7 @@ public class OperationImpl implements Operation{
                     for(int i=0; i<action.size();i++){
                        switch (action.get(i)){
                            case '*': if (exprOne!=0) exprOne=multiply(exprOne,expr.get(i));
+                               //если первым в вырожении идёт отрицательное число(сложение работает, вычитание не очень)
                                else {if (action.size()==expr.size()){exprOne = multiply(expr.get(i-1), expr.get(i));
                                expr.remove(i);
                                expr.remove(i-1);
@@ -65,7 +66,7 @@ public class OperationImpl implements Operation{
                        }
                     }
                 }
-                System.out.println(expr);
+
                 if (all.contains("+") || all.contains("-")){
                     for(int i=0; i<action.size();i++){
                         switch (action.get(i)){
@@ -89,6 +90,7 @@ public class OperationImpl implements Operation{
                 exprOne =0;
                 expr.clear();
                 action.clear();
+
             }
 
 
@@ -98,11 +100,7 @@ public class OperationImpl implements Operation{
 
 
     }
-    private double exprTwo, exprOne;
-
-
-
-
+    private double exprOne;
 
     @Override
     public Double sum(double a, double b) {
@@ -111,7 +109,6 @@ public class OperationImpl implements Operation{
 
     @Override
     public Double multiply(double a, double b) {
-        System.out.println(a*b);
         return a*b;
     }
 
@@ -122,7 +119,6 @@ public class OperationImpl implements Operation{
 
     @Override
     public Double div(double a, double b) {
-        System.out.println(a/b);
         return a/b;
     }
 }
