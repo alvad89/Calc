@@ -1,7 +1,7 @@
 package ru.calc;
 
 /**
- * Created with IntelliJ IDEA.
+ *
  * User: a1
  * Date: 29.03.13
  * Time: 8:28

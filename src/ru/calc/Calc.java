@@ -1,7 +1,8 @@
 package ru.calc;
 
+
 /**
- * Created with IntelliJ IDEA.
+ *
  * User: a1
  * Date: 29.03.13
  * Time: 8:27
@@ -9,7 +10,8 @@ package ru.calc;
  */
 public class Calc {
     public static void main(String[] args){
-
+        OperationImpl op = new OperationImpl();
+        op.operat();
     }
 
 }
