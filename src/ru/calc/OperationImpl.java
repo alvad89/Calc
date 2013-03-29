@@ -22,29 +22,73 @@ public class OperationImpl implements Operation{
         BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
         String all = null;
         List<Double> expr = new ArrayList<Double>();
+        List<Character> action = new ArrayList<Character>();
         exprOne = 0;
-        exprTwo =0;
-        action = ' ';
+        exprTwo = 0;
         try {
             while((all=inp.readLine()) !=null && !all.equals("")){
-                if(all.contains("(")){System.out.println("Crj,rf!!!");}
+
+
                 for (String a: all.split("[+ * \\- / ]")){
-                    expr.add(Double.valueOf(a));
-                    System.out.println(a);
+                     if (a.length()>0)expr.add(Double.valueOf(a));
                 }
                 System.out.println(expr);
-               // String s = all.substring(0, all.indexOf(" "));
-               // System.out.println(s);
-               // exprOne = Double.parseDouble(s);
-               // s = all.substring(all.indexOf(" ")+1, all.lastIndexOf(" "));
-               // action = s.charAt(0);
-               // System.out.println(all.substring(all.indexOf(" ")+1, all.lastIndexOf(" ")));
-               // exprTwo = Double.parseDouble(all.substring(all.lastIndexOf(" ")));
-                switch (action){
-                    case '+': System.out.println("summm"); break;
-                    case '-': System.out.println("dev"); break;
-                    default: break;
+                for (String a: all.split("[0-9]")){
+                    if(a.length()>0) action.add(a.charAt(0));
+
                 }
+                //Сначала выполним поиск операторов умножения и деления
+                if(all.contains("*") || all.contains("/")){
+                    for(int i=0; i<action.size();i++){
+                       switch (action.get(i)){
+                           case '*': if (exprOne!=0) exprOne=multiply(exprOne,expr.get(i));
+                               else {if (action.size()==expr.size()){exprOne = multiply(expr.get(i-1), expr.get(i));
+                               expr.remove(i);
+                               expr.remove(i-1);
+                               expr.add(i-1,exprOne);} else {
+                               exprOne = multiply(expr.get(i), expr.get(i+1));
+                               expr.remove(i+1);
+                               expr.remove(i);
+                               expr.add(i,exprOne);        }
+                           } break;
+                           case '/': if (exprOne!=0) exprOne=div(exprOne,expr.get(i));
+                           else {if (action.size()==expr.size()){exprOne = div(expr.get(i-1), expr.get(i));
+                               expr.remove(i);
+                               expr.remove(i-1);
+                               expr.add(i-1,exprOne);} else {
+                               exprOne = div(expr.get(i), expr.get(i+1));
+                               expr.remove(i+1);
+                               expr.remove(i);
+                               expr.add(i,exprOne);        }
+                           } break;
+                           default: break;
+                       }
+                    }
+                }
+                System.out.println(expr);
+                if (all.contains("+") || all.contains("-")){
+                    for(int i=0; i<action.size();i++){
+                        switch (action.get(i)){
+                            case '+': if (exprOne!=0) exprOne=sum(exprOne,expr.get(i));
+                            else {exprOne = sum(expr.get(i), expr.get(i+1));
+                                expr.remove(i+1);
+                                expr.remove(i);
+                                expr.add(i,exprOne);}
+                                break;
+                            case '-': if (exprOne!=0) exprOne=sub(exprOne, expr.get(i));
+                            else {exprOne = sub(expr.get(i), expr.get(i+1));
+                                expr.remove(i+1);
+                                expr.remove(i);
+                                expr.add(i,exprOne);}
+                                break;
+                            default: break;
+                        }
+                    }
+                }
+                System.out.println(exprOne);
+                exprOne =0;
+                expr.clear();
+                action.clear();
             }
 
 
@@ -54,30 +98,31 @@ public class OperationImpl implements Operation{
 
 
     }
-    private double exprTwo, exprOne, exprThree, exprFour;
-    private char action;
+    private double exprTwo, exprOne;
+
 
 
 
 
     @Override
-    public void sum(double a, double b) {
-        System.out.println(a+b);
+    public Double sum(double a, double b) {
+        return a+b;
     }
 
     @Override
-    public void multiply(double a, double b) {
+    public Double multiply(double a, double b) {
         System.out.println(a*b);
+        return a*b;
     }
 
     @Override
-    public void sub(double a, double b) {
-       if (a >= b) System.out.println(a/b);
-        else System.out.println(b/a);
+    public Double sub(double a, double b) {
+        return a-b;
     }
 
     @Override
-    public void div(double a, double b) {
-
+    public Double div(double a, double b) {
+        System.out.println(a/b);
+        return a/b;
     }
 }

@@ -8,8 +8,8 @@ package ru.calc;
  * To change this template use File | Settings | File Templates.
  */
 public interface Operation {
-    public void sum(double a, double b);
-    public void multiply(double a, double b);
-    public void sub(double a, double b);
-    public void div(double a, double b);
+    public Double sum(double a, double b);
+    public Double multiply(double a, double b);
+    public Double sub(double a, double b);
+    public Double div(double a, double b);
 }
