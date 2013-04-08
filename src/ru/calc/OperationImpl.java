@@ -1,12 +1,11 @@
 package ru.calc;
 
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
@@ -17,14 +16,23 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class OperationImpl implements Operation{
-    public void operat(){
+    public void operat(String[] args){
         System.out.println("Enter expression:");
-        BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
+        //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
+        List<String> str = new ArrayList<String>();
         String all = null;
+        for (int i=0; i<args.length; i++){
+            System.out.print(args[i]);
+            str.add(args[i]);
+        }
+        Pattern numbers = Pattern.compile("");
+      //  System.out.println(args[1]);
+        Operators op = Operators.MULTIPL;
+
         List<Double> expr = new ArrayList<Double>();
         List<Character> action = new ArrayList<Character>();
         exprOne = 0;
-
+        /*
         try {
             while((all=inp.readLine()) !=null && !all.equals("")){
 
@@ -96,7 +104,7 @@ public class OperationImpl implements Operation{
 
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        }  */
 
 
     }
@@ -121,4 +129,10 @@ public class OperationImpl implements Operation{
     public Double div(double a, double b) {
         return a/b;
     }
+}
+enum Operators {
+    SUM,
+    MULTIPL,
+    SUB,
+    DIV,
 }

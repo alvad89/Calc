@@ -11,7 +11,7 @@ package ru.calc;
 public class Calc {
     public static void main(String[] args){
         OperationImpl op = new OperationImpl();
-        op.operat();
+        op.operat(args);
     }
 
 }
