@@ -6,7 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -19,13 +23,21 @@ import java.util.List;
 public class OperationImpl implements Operation{
     public void operat(){
         System.out.println("Enter expression:");
-        BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
+        //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
+        String inputs = "- 2 + 3 * ( 4 - 1 )";
+        Scanner in = new Scanner(inputs);
         String all = null;
+        Pattern pat = Pattern.compile("\\s*([-+]?\\d+\\.?\\d*(e[-+]?)?\\d*\\s*)(.*)", Pattern.CASE_INSENSITIVE);
+        System.out.println(in.next(pat));
+        Pattern pt = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s*([^)]*)$", Pattern.CASE_INSENSITIVE);
+        System.out.println(in.next(pt));
+
+        in.close();
         List<Double> expr = new ArrayList<Double>();
         List<Character> action = new ArrayList<Character>();
         exprOne = 0;
 
-        try {
+      /*  try {
             while((all=inp.readLine()) !=null && !all.equals("")){
 
                 //сохраним все цифры в массив по порядку
@@ -96,7 +108,7 @@ public class OperationImpl implements Operation{
 
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        } */
 
 
     }
