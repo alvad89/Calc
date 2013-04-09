@@ -1,12 +1,15 @@
 package ru.calc;
 
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.util.*;
 import java.util.regex.Matcher;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.regex.Pattern;
 
 
@@ -17,6 +20,7 @@ import java.util.regex.Pattern;
  * Time: 8:56
  * To change this template use File | Settings | File Templates.
  */
+
 public class OperationImpl{
     public void operat(String[] args){
         System.out.println("Enter expression:");
@@ -87,6 +91,27 @@ public class OperationImpl{
         exprOne = 0;
 
       /*  try {
+
+public class OperationImpl implements Operation{
+    public void operat(String[] args){
+        System.out.println("Enter expression:");
+        //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
+        List<String> str = new ArrayList<String>();
+        String all = null;
+        for (int i=0; i<args.length; i++){
+            System.out.print(args[i]);
+            str.add(args[i]);
+        }
+        Pattern numbers = Pattern.compile("");
+      //  System.out.println(args[1]);
+        Operators op = Operators.MULTIPL;
+
+        List<Double> expr = new ArrayList<Double>();
+        List<Character> action = new ArrayList<Character>();
+        exprOne = 0;
+        /*
+        try {
+
             while((all=inp.readLine()) !=null && !all.equals("")){
 
                 //сохраним все цифры в массив по порядку
@@ -157,7 +182,9 @@ public class OperationImpl{
 
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
         } */
+
 
 
     }
@@ -179,4 +206,10 @@ public class OperationImpl{
     }
 
  
+}
+enum Operators {
+    SUM,
+    MULTIPL,
+    SUB,
+    DIV,
 }
