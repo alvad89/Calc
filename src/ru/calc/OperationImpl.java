@@ -27,7 +27,6 @@ public class OperationImpl{
         //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
         //String inputs = "- 2 + 3 * ( 4 - 1 )";
        // Scanner in = new Scanner(inputs);
-        String all = null;
         LinkedList<String> st = new LinkedList<String>();
 
         for (String arg : args) {
@@ -35,22 +34,30 @@ public class OperationImpl{
             st.add(arg);
 
         }
-        List<Double> variebl = new ArrayList<Double>();
-        Pattern three = Pattern.compile("\\s*([+-]?\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)", Pattern.CASE_INSENSITIVE);
+
+        LinkedList<String> sstr = new LinkedList<String>();
+        //Распарсили строчку. каждый символ по отдельности!
+        Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * / \\( \\)]", Pattern.CASE_INSENSITIVE);
         //Pattern three = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s([^)]*)$", Pattern.CASE_INSENSITIVE);
-        //Pattern three = Pattern.compile("^([^ ]*)( )(.*)$",Pattern.CASE_INSENSITIVE);
+       // Pattern operand = Pattern.compile("[\\- + * / \\( \\)]",Pattern.CASE_INSENSITIVE);
         Matcher matcher = three.matcher(st.get(0));
-        System.out.println(matcher.groupCount());
+      //  Matcher matcherOperand = operand.matcher(st.get(0));
+
         while (matcher.find()){
-            int start = matcher.start();
-            int end=matcher.end();
-            String s = st.get(0).substring(start, end);
-            //System.out.println(s);
-            variebl.add(Double.valueOf(s));
-        }
+            int startnumb = matcher.start();
+            int endnumb= matcher.end();
+            String s = st.get(0).substring(startnumb, endnumb);
+     //       if ((endnumb-startnumb)>1){
+      //          dlina = dlina -(endnumb-startnumb);
+                sstr.add(s);
+
+
+              }
+
+
 
         int previous =0;
-        System.out.println(variebl);
+        System.out.println(sstr);
         LinkedList<String> expr = new LinkedList<String>();
         char[] chars = st.get(0).toCharArray();
         for (int i = 0; i < chars.length; i++) {
@@ -58,7 +65,6 @@ public class OperationImpl{
             expr.add(aChar.toString());
             Matcher matcherNumb = three.matcher(aChar.toString());
             if (matcherNumb.matches()){
-              //  System.out.println("trueee");
                 if ((i-previous)>1){
                     previous=i;
                 }
