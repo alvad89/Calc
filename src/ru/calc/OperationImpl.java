@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class OperationImpl{
     public void operat(String[] args){
-        System.out.println("Enter expression:");
+        System.out.print("Expression: ");
         //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
         //String inputs = "- 2 + 3 * ( 4 - 1 )";
        // Scanner in = new Scanner(inputs);
@@ -47,17 +47,12 @@ public class OperationImpl{
             int startnumb = matcher.start();
             int endnumb= matcher.end();
             String s = st.get(0).substring(startnumb, endnumb);
-     //       if ((endnumb-startnumb)>1){
-      //          dlina = dlina -(endnumb-startnumb);
                 sstr.add(s);
-
-
               }
 
 
 
         int previous =0;
-        System.out.println(sstr);
         LinkedList<String> expr = new LinkedList<String>();
         char[] chars = st.get(0).toCharArray();
         for (int i = 0; i < chars.length; i++) {
@@ -69,32 +64,34 @@ public class OperationImpl{
                     previous=i;
                 }
             }
+        }
 
-
-            switch (aChar) {
+        Iterator<String> iter = sstr.iterator();
+        while (iter.hasNext()){
+            switch (iter.next().charAt(0)){
                 case '+':
-                //    System.out.println("+");
+                        System.out.println("node");
                     break;
                 case '-':
-                //    System.out.println("-");
+                        System.out.println("node");
                     break;
                 case '*':
-                //    System.out.println("*");
+                        System.out.println("node");
                     break;
                 case '/':
-                //    System.out.println("-");
+                        System.out.println("node");
                     break;
-                default:
+                default: System.out.println("leaf");
                     break;
             }
         }
-
-        Iterator<String> iter = expr.iterator();
 
 
       //  List<Double> expr = new ArrayList<Double>();
         List<Character> action = new ArrayList<Character>();
         exprOne = 0;
+        TreeMap<Integer, String> derevo = new TreeMap<Integer, String>();
+
 
       /*  try {
 
