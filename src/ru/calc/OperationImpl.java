@@ -1,15 +1,9 @@
 package ru.calc;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import java.util.*;
 import java.util.regex.Matcher;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.regex.Pattern;
 
 
@@ -28,12 +22,13 @@ public class OperationImpl{
         //String inputs = "- 2 + 3 * ( 4 - 1 )";
        // Scanner in = new Scanner(inputs);
         LinkedList<String> st = new LinkedList<String>();
-
         for (String arg : args) {
             System.out.println(arg);
             st.add(arg);
 
         }
+        TreeImpl<String> tree = new TreeImpl<String>();
+
 
         LinkedList<String> sstr = new LinkedList<String>();
         //Распарсили строчку. каждый символ по отдельности!
@@ -49,6 +44,7 @@ public class OperationImpl{
             String s = st.get(0).substring(startnumb, endnumb);
                 sstr.add(s);
               }
+
 
 
 
