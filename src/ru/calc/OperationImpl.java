@@ -27,10 +27,30 @@ public class OperationImpl{
             st.add(arg);
 
         }
-        TreeImpl<String> tree = new TreeImpl<String>();
-
-
         LinkedList<String> sstr = new LinkedList<String>();
+
+        TreeImpl tree = new TreeImpl();
+        //TreeNode root = new TreeNode(null, null, null, null);
+        TreeNode first = new TreeNode("+", null, null, null);
+        TreeNode second = new TreeNode();
+        TreeNode thrid = new TreeNode();
+        first.setRight(second);
+        first.setLeft(thrid);
+        //tree.add(root);
+        tree.addNode(first);
+        tree.addNode(second);
+        tree.addNode(thrid);
+        TreeNode four = new TreeNode();
+        four.setElement("==");
+        four.setParent(first);
+        four.setRight(thrid);
+        four.setLeft(null);
+        tree.addNode(four);
+        System.out.println(tree.size());
+        System.out.println(tree);
+        tree.removeNode(second);
+        System.out.println(tree.get(0).getElement());
+
         //Распарсили строчку. каждый символ по отдельности!
         Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * / \\( \\)]", Pattern.CASE_INSENSITIVE);
         //Pattern three = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s([^)]*)$", Pattern.CASE_INSENSITIVE);
@@ -62,7 +82,7 @@ public class OperationImpl{
             }
         }
 
-        Iterator<String> iter = sstr.iterator();
+       /* Iterator<String> iter = sstr.iterator();
         while (iter.hasNext()){
             switch (iter.next().charAt(0)){
                 case '+':
@@ -80,7 +100,7 @@ public class OperationImpl{
                 default: System.out.println("leaf");
                     break;
             }
-        }
+        }*/
 
 
       //  List<Double> expr = new ArrayList<Double>();
