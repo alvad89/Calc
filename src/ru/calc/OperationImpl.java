@@ -30,31 +30,41 @@ public class OperationImpl{
         LinkedList<String> sstr = new LinkedList<String>();
 
         TreeImpl tree = new TreeImpl();
-        //TreeNode root = new TreeNode(null, null, null, null);
-        TreeNode first = new TreeNode("+", null, null, null);
+
+        TreeNode first = new TreeNode();
         TreeNode second = new TreeNode();
         TreeNode thrid = new TreeNode();
-        first.setRight(second);
-        first.setLeft(thrid);
-        //tree.add(root);
-        tree.addNode(first);
-        tree.addNode(second);
-        tree.addNode(thrid);
         TreeNode four = new TreeNode();
-        four.setElement("==");
-        four.setParent(first);
-        four.setRight(thrid);
-        four.setLeft(null);
-        tree.addNode(four);
+        TreeNode five = new TreeNode();
+        four.setElement("4");
+        five.setElement("5");
+        thrid.setElement("+");
+        thrid.setLeft(four);   thrid.setRight(five);
+        four.setParent(thrid);  five.setParent(thrid);
+        four.setRight(null);four.setLeft(null);
+        five.setRight(null);five.setLeft(null);
+        second.setElement("2");
+        second.setRight(null);second.setLeft(null);
+        first.setElement("*");
+        first.setRight(thrid);first.setLeft(second);
+        thrid.setParent(first);
+        second.setParent(first);
+      //  tree.addNode(first);
+      //  tree.addNode(second);
+      //  tree.addNode(thrid);
+      //  tree.addNode(four);
+      //  tree.addNode(five);
         System.out.println(tree.size());
         System.out.println(tree);
-        tree.removeNode(second);
-        System.out.println(tree.get(0).getElement());
+
+      //  System.out.println(tree.get(5).getParent().getParent().getLeft().getElement());
 
         //Распарсили строчку. каждый символ по отдельности!
-        Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * / \\( \\)]", Pattern.CASE_INSENSITIVE);
-        //Pattern three = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s([^)]*)$", Pattern.CASE_INSENSITIVE);
+        Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
+       // Pattern three2 = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s([^)]*)$", Pattern.CASE_INSENSITIVE);
        // Pattern operand = Pattern.compile("[\\- + * / \\( \\)]",Pattern.CASE_INSENSITIVE);
+        Pattern numeric = Pattern.compile("[0-9]", Pattern.CASE_INSENSITIVE);
+
         Matcher matcher = three.matcher(st.get(0));
       //  Matcher matcherOperand = operand.matcher(st.get(0));
 
@@ -62,7 +72,7 @@ public class OperationImpl{
             int startnumb = matcher.start();
             int endnumb= matcher.end();
             String s = st.get(0).substring(startnumb, endnumb);
-                sstr.add(s);
+            sstr.add(s);
               }
 
 
@@ -81,10 +91,21 @@ public class OperationImpl{
                 }
             }
         }
-
-       /* Iterator<String> iter = sstr.iterator();
-        while (iter.hasNext()){
-            switch (iter.next().charAt(0)){
+        System.out.println(sstr);
+        System.out.println(sstr.indexOf("("));
+        TreeNode parent = new TreeNode();
+        TreeNode left = new TreeNode();
+        TreeNode right = new TreeNode();
+        for (int i = 0; i<sstr.size(); i++) {
+             Matcher numb = numeric.matcher(sstr.get(i));
+            //System.out.println(aSstr);
+            if (numb.find())
+            {
+                tree.addNode(new TreeNode(sstr.get(i),null));
+                System.out.println(sstr.get(i));
+            }
+            else System.out.println(sstr.get(i));
+            /*switch (iter.next().charAt(0)){
                 case '+':
                         System.out.println("node");
                     break;
@@ -99,14 +120,12 @@ public class OperationImpl{
                     break;
                 default: System.out.println("leaf");
                     break;
-            }
-        }*/
+            } */
+
+        }
+        System.out.println(tree);
 
 
-      //  List<Double> expr = new ArrayList<Double>();
-        List<Character> action = new ArrayList<Character>();
-        exprOne = 0;
-        TreeMap<Integer, String> derevo = new TreeMap<Integer, String>();
 
 
       /*  try {

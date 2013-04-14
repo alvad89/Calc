@@ -107,12 +107,13 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
     @Override
     public void addNode(TreeNode e) {
         ensureCapacity(size+1);
-        if(isNode(e)){
-            e.setRight(e.getParent());//new TreeNode(null,null,null, e));
-            e.setLeft(e.getParent());//new TreeNode(null,null,null, e));
-            size +=2;
-            elementData[size+1] = e;
-        }
+        elementData[size+1] = e;
+        size++;
+       //     e.setRight(e.getParent());//new TreeNode(null,null,null, e));
+       //     e.setLeft(e.getParent());//new TreeNode(null,null,null, e));
+       //     size +=2;
+       //     elementData[size++] = e;
+       // }
     }
 
     @Override
@@ -150,6 +151,7 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
             // minCapacity is usually close to size, so this is a win:
             elementData = Arrays.copyOf(elementData, newCapacity);
         }
-    }
+    }}
 
-}
+
+

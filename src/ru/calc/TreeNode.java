@@ -8,8 +8,8 @@ package ru.calc;
  * To change this template use File | Settings | File Templates.
  */
 public class TreeNode {
-    private transient TreeNode left, right, parent;
-    private transient Object element;
+    private  TreeNode left, right, parent;
+    private  Object element;
 
     public TreeNode(){
 
@@ -18,6 +18,12 @@ public class TreeNode {
         setElement(o);
         setLeft(leftChild);
         setRight(rightChild);
+        setParent(parentNode);
+    }
+    public TreeNode(Object o, TreeNode parentNode){
+        setElement(o);
+        setLeft(null);
+        setRight(null);
         setParent(parentNode);
     }
 
