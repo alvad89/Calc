@@ -47,7 +47,7 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
 
     @Override
     public int size() {
-        return elementData.length;
+        return size;
     }
 
     @Override
@@ -61,23 +61,25 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
     }
 
     @Override
-    public TreeNode root() {
+    public TreeNode getRoot() {
+        int i=0;
+
         return root;
     }
 
     @Override
     public boolean isNode(TreeNode e) {
-        return (e.getLeft()!=null && ((TreeNode) e).getRight()!=null);
+        return (e.getLeft()!=null && e.getRight()!=null);
     }
 
     @Override
     public boolean isLeaf(TreeNode e) {
-        return (( e.getLeft() == null) && (((TreeNode) e).getRight() == null));
+        return (( e.getLeft() == null) && ( e.getRight() == null));
     }
 
     @Override
     public boolean isRoot(TreeNode e) {
-        return (e==root());
+        return (e==getRoot());
     }
 
     @Override
@@ -107,8 +109,9 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
     @Override
     public void addNode(TreeNode e) {
         ensureCapacity(size+1);
-        elementData[size+1] = e;
+        elementData[size] = e;
         size++;
+
        //     e.setRight(e.getParent());//new TreeNode(null,null,null, e));
        //     e.setLeft(e.getParent());//new TreeNode(null,null,null, e));
        //     size +=2;

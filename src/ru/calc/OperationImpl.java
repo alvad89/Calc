@@ -54,15 +54,13 @@ public class OperationImpl{
       //  tree.addNode(thrid);
       //  tree.addNode(four);
       //  tree.addNode(five);
-        System.out.println(tree.size());
-        System.out.println(tree);
 
       //  System.out.println(tree.get(5).getParent().getParent().getLeft().getElement());
 
         //Распарсили строчку. каждый символ по отдельности!
         Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
        // Pattern three2 = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s([^)]*)$", Pattern.CASE_INSENSITIVE);
-       // Pattern operand = Pattern.compile("[\\- + * / \\( \\)]",Pattern.CASE_INSENSITIVE);
+        Pattern operand = Pattern.compile("(\\- +)(\\* / \\( \\))",Pattern.CASE_INSENSITIVE);
         Pattern numeric = Pattern.compile("[0-9]", Pattern.CASE_INSENSITIVE);
 
         Matcher matcher = three.matcher(st.get(0));
@@ -74,9 +72,6 @@ public class OperationImpl{
             String s = st.get(0).substring(startnumb, endnumb);
             sstr.add(s);
               }
-
-
-
 
         int previous =0;
         LinkedList<String> expr = new LinkedList<String>();
@@ -92,162 +87,114 @@ public class OperationImpl{
             }
         }
         System.out.println(sstr);
-        System.out.println(sstr.indexOf("("));
-        TreeNode parent = new TreeNode();
-        TreeNode left = new TreeNode();
-        TreeNode right = new TreeNode();
-        for (int i = 0; i<sstr.size(); i++) {
+        tree = createTree(sstr);
+
+      /*  for (int i = 0; i<sstr.size(); i++) {
              Matcher numb = numeric.matcher(sstr.get(i));
-            //System.out.println(aSstr);
+            Matcher ololo = operand.matcher(sstr.get(i));
+            System.out.println(ololo.groupCount());
+
             if (numb.find())
             {
                 tree.addNode(new TreeNode(sstr.get(i),null));
                 System.out.println(sstr.get(i));
             }
             else System.out.println(sstr.get(i));
-            /*switch (iter.next().charAt(0)){
-                case '+':
-                        System.out.println("node");
-                    break;
-                case '-':
-                        System.out.println("node");
-                    break;
-                case '*':
-                        System.out.println("node");
-                    break;
-                case '/':
-                        System.out.println("node");
-                    break;
-                default: System.out.println("leaf");
-                    break;
-            } */
 
-        }
-        System.out.println(tree);
-
-
-
-
-      /*  try {
-
-public class OperationImpl implements Operation{
-    public void operat(String[] args){
-        System.out.println("Enter expression:");
-        //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
-        List<String> str = new ArrayList<String>();
-        String all = null;
-        for (int i=0; i<args.length; i++){
-            System.out.print(args[i]);
-            str.add(args[i]);
-        }
-        Pattern numbers = Pattern.compile("");
-      //  System.out.println(args[1]);
-        Operators op = Operators.MULTIPL;
-
-        List<Double> expr = new ArrayList<Double>();
-        List<Character> action = new ArrayList<Character>();
-        exprOne = 0;
-        /*
-        try {
-
-            while((all=inp.readLine()) !=null && !all.equals("")){
-
-                //сохраним все цифры в массив по порядку
-                for (String a: all.split("[+ * \\- / ( )]")){
-                     if (a.length()>0)expr.add(Double.valueOf(a));
-                }
-                //сохраним все действия по порядку
-                for (String a: all.split("[0-9]")){
-                    if(a.length()>0) action.add(a.charAt(0));
-
-                }
-                //Сначала выполним поиск операторов умножения и деления
-                if(all.contains("*") || all.contains("/")){
-                    for(int i=0; i<action.size();i++){
-                       switch (action.get(i)){
-                           case '*': if (exprOne!=0) exprOne=multiply(exprOne,expr.get(i));
-                               //если первым в вырожении идёт отрицательное число(сложение работает, вычитание не очень)
-                               else {if (action.size()==expr.size()){exprOne = multiply(expr.get(i-1), expr.get(i));
-                               expr.remove(i);
-                               expr.remove(i-1);
-                               expr.add(i-1,exprOne);} else {
-                               exprOne = multiply(expr.get(i), expr.get(i+1));
-                               expr.remove(i+1);
-                               expr.remove(i);
-                               expr.add(i,exprOne);        }
-                           } break;
-                           case '/': if (exprOne!=0) exprOne=div(exprOne,expr.get(i));
-                           else {if (action.size()==expr.size()){exprOne = div(expr.get(i-1), expr.get(i));
-                               expr.remove(i);
-                               expr.remove(i-1);
-                               expr.add(i-1,exprOne);} else {
-                               exprOne = div(expr.get(i), expr.get(i+1));
-                               expr.remove(i+1);
-                               expr.remove(i);
-                               expr.add(i,exprOne);        }
-                           } break;
-                           default: break;
-                       }
-                    }
-                }
-
-                if (all.contains("+") || all.contains("-")){
-                    for(int i=0; i<action.size();i++){
-                        switch (action.get(i)){
-                            case '+': if (exprOne!=0) exprOne=sum(exprOne,expr.get(i));
-                            else {exprOne = sum(expr.get(i), expr.get(i+1));
-                                expr.remove(i+1);
-                                expr.remove(i);
-                                expr.add(i,exprOne);}
-                                break;
-                            case '-': if (exprOne!=0) exprOne=sub(exprOne, expr.get(i));
-                            else {exprOne = sub(expr.get(i), expr.get(i+1));
-                                expr.remove(i+1);
-                                expr.remove(i);
-                                expr.add(i,exprOne);}
-                                break;
-                            default: break;
-                        }
-                    }
-                }
-                System.out.println(exprOne);
-                exprOne =0;
-                expr.clear();
-                action.clear();
-
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 
         } */
+      //  System.out.println(tree.get(3).getParent().getLeft().getElement());
+        Operators operators;
+        System.out.println(tree);
+        for (int  i =0 ; i<tree.size(); i++){
+           System.out.println(tree.get(i).getElement()+" nom "+ i);
+            if (tree.get(i).getParent()==null){
+                System.out.println(tree.get(i).getElement());
 
-
-
-    }
-    private double exprOne;
-    public boolean isOperand(char s){
-        switch (s){
-            case '0':return true;
-            case '1':return true;
-            case '2':return true;
-            case '3':return true;
-            case '4':return true;
-            case '5':return true;
-            case '6':return true;
-            case '7':return true;
-            case '8':return true;
-            case '9':return true;
+            }
         }
-        return false;
-    }
-
- 
+       System.out.println(tree.get(4).getParent().getParent().getLeft().getElement());
+       //System.out.println(tree.get(1).getParent().getRight().getRight().getElement());
+        getResult(tree);
 }
+
+    public TreeImpl createTree(LinkedList input){
+        TreeImpl tree = new TreeImpl();
+        TreeNode oldParent = new TreeNode();
+        TreeNode parent= new TreeNode();
+        TreeNode root = new TreeNode();
+        TreeNode left = new TreeNode();
+        TreeNode right = new TreeNode();
+        Pattern hightPriority = Pattern.compile("[\\* / ]", Pattern.CASE_INSENSITIVE);
+        Pattern lowPriority = Pattern.compile("[-+]", Pattern.CASE_INSENSITIVE);
+        int previous = 0;
+        for (int i =0; i<input.size(); i++){
+            Matcher match = hightPriority.matcher(input.get(i).toString());
+            Matcher low = lowPriority.matcher(input.get(i).toString());
+        if (match.find()){
+            parent = new TreeNode(input.get(i).toString().charAt(0), parent);
+            left = new TreeNode(Double.valueOf(input.get(i-1).toString()),null,null, parent);
+            right = new TreeNode(Double.valueOf(input.get(i + 1).toString()), null,null, parent);
+            parent.setLeft(left);parent.setRight(right);
+            tree.addNode(parent);
+            previous = i;
+            tree.addNode(left);
+            tree.addNode(right);
+        }else if (low.find()){
+            if (parent.getElement()==null){
+               parent = new TreeNode(input.get(i).toString(), null);
+               if ((i-1)<0)
+                left = new TreeNode(Double.valueOf("0"),null, null, parent);
+                else left = new TreeNode(Double.valueOf(input.get(i - 1).toString()),null, null, parent);
+                //previous = i;
+               parent.setLeft(left);
+               tree.addNode(parent);
+               tree.addNode(left);
+            }  else {
+                left = new TreeNode(Double.valueOf(input.get(i+1).toString()), null,null, null);
+                parent = new TreeNode(input.get(i).toString().charAt(0), left,parent,null);
+                tree.get(previous).setParent(parent);
+                //parent.setParent(tree.get(previous));
+                left.setParent(parent);
+                tree.addNode(parent);
+                tree.addNode(left);
+                if (i>(input.size()/2)){
+                    right = new TreeNode(Double.valueOf(input.get(i-1).toString()),null,null,parent);
+                    parent.setRight(right);
+                    tree.addNode(right);
+                }
+            }
+        }
+
+        }
+        return tree;
+
+    }
+    public void getResult(TreeImpl tree){
+          //System.out.println(tree.root().getElement());
+        for (TreeNode node: tree){
+            if (node.getParent()==null){System.out.println("isRoot");
+                if (node.getRight().getElement()!=null){
+                    System.out.println(node.getRight().getElement());
+                }
+
+            }
+        }
+    }
 enum Operators {
-    SUM,
-    MULTIPL,
+    SUM{
+       public String toString(){
+           return "+";
+       }
+    },
+    MULTIPL{
+        public String toString(){
+            return "*";
+        }
+    },
     SUB,
-    DIV,
+    DIV;
+
+
+}
 }

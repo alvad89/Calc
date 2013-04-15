@@ -15,7 +15,7 @@ public interface TreeInspectable<TreeNode>{
     public boolean isEmpthy();
     public TreeNode element();
     //методы доступа
-    public TreeNode root();
+    public TreeNode getRoot();
     //public E parent(E e);
     //public Iterable<E> children(E e);
     //методы запроса
