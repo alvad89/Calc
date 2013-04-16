@@ -1,5 +1,10 @@
 package ru.calc;
 
+import ru.calc.ru.operator.Div;
+import ru.calc.ru.operator.Mult;
+import ru.calc.ru.operator.Sub;
+import ru.calc.ru.operator.Summ;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.ArrayList;
@@ -16,11 +21,21 @@ import java.util.regex.Pattern;
  */
 
 public class OperationImpl{
+    private LinkedList<Operation> oper = null;
+    private TreeNode root;
+    public OperationImpl(){
+        super();
+        oper = new LinkedList<Operation>();
+        oper.add(new Summ());
+        oper.add(new Mult());
+        oper.add(new Sub());
+        oper.add(new Div());
+    }
     public void operat(String[] args){
         System.out.print("Expression: ");
         //BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
         //String inputs = "- 2 + 3 * ( 4 - 1 )";
-       // Scanner in = new Scanner(inputs);
+        //Scanner in = new Scanner(inputs);
         LinkedList<String> st = new LinkedList<String>();
         for (String arg : args) {
             System.out.println(arg);
@@ -31,35 +46,22 @@ public class OperationImpl{
 
         TreeImpl tree = new TreeImpl();
 
-        TreeNode first = new TreeNode();
-        TreeNode second = new TreeNode();
-        TreeNode thrid = new TreeNode();
-        TreeNode four = new TreeNode();
-        TreeNode five = new TreeNode();
-        four.setElement("4");
-        five.setElement("5");
-        thrid.setElement("+");
-        thrid.setLeft(four);   thrid.setRight(five);
-        four.setParent(thrid);  five.setParent(thrid);
-        four.setRight(null);four.setLeft(null);
-        five.setRight(null);five.setLeft(null);
-        second.setElement("2");
-        second.setRight(null);second.setLeft(null);
-        first.setElement("*");
-        first.setRight(thrid);first.setLeft(second);
-        thrid.setParent(first);
-        second.setParent(first);
-      //  tree.addNode(first);
-      //  tree.addNode(second);
-      //  tree.addNode(thrid);
-      //  tree.addNode(four);
-      //  tree.addNode(five);
+        TreeNode first = new TreeNode('-',null);
+        TreeNode second = new TreeNode("6",null, null,first);
+        TreeNode thrid = new TreeNode('/', first);
+        TreeNode four = new TreeNode("12",null,null,thrid);
+        TreeNode five = new TreeNode("4",null,null,thrid);
+        first.setLeft(second);first.setRight(thrid);
+        thrid.setLeft(four);thrid.setRight(five);
+        tree.addNode(first);
+        tree.addNode(second);
+        tree.addNode(thrid);
+        tree.addNode(four);
+        tree.addNode(five);
 
-      //  System.out.println(tree.get(5).getParent().getParent().getLeft().getElement());
 
         //Распарсили строчку. каждый символ по отдельности!
         Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
-       // Pattern three2 = Pattern.compile("\\s*\\(\\s*(.*)\\s*\\)\\s([^)]*)$", Pattern.CASE_INSENSITIVE);
         Pattern operand = Pattern.compile("(\\- +)(\\* / \\( \\))",Pattern.CASE_INSENSITIVE);
         Pattern numeric = Pattern.compile("[0-9]", Pattern.CASE_INSENSITIVE);
 
@@ -104,24 +106,24 @@ public class OperationImpl{
 
         } */
       //  System.out.println(tree.get(3).getParent().getLeft().getElement());
-        Operators operators;
-        System.out.println(tree);
+
+      System.out.println(tree);
         for (int  i =0 ; i<tree.size(); i++){
            System.out.println(tree.get(i).getElement()+" nom "+ i);
-            if (tree.get(i).getParent()==null){
-                System.out.println(tree.get(i).getElement());
 
-            }
         }
-       System.out.println(tree.get(4).getParent().getParent().getLeft().getElement());
+      // System.out.println(tree.get(4).getParent().getParent().getLeft().getElement());
        //System.out.println(tree.get(1).getParent().getRight().getRight().getElement());
-        getResult(tree);
+
+
+       // root = tree.getRoot();
+      //  System.out.println(getResult(root));
 }
 
     public TreeImpl createTree(LinkedList input){
         TreeImpl tree = new TreeImpl();
         TreeNode oldParent = new TreeNode();
-        TreeNode parent= new TreeNode();
+        TreeNode parent= new TreeNode(null,null);
         TreeNode root = new TreeNode();
         TreeNode left = new TreeNode();
         TreeNode right = new TreeNode();
@@ -155,7 +157,7 @@ public class OperationImpl{
                 parent = new TreeNode(input.get(i).toString().charAt(0), left,parent,null);
                 tree.get(previous).setParent(parent);
                 //parent.setParent(tree.get(previous));
-                left.setParent(parent);
+               // left.setParent(parent);
                 tree.addNode(parent);
                 tree.addNode(left);
                 if (i>(input.size()/2)){
@@ -170,31 +172,21 @@ public class OperationImpl{
         return tree;
 
     }
-    public void getResult(TreeImpl tree){
-          //System.out.println(tree.root().getElement());
-        for (TreeNode node: tree){
-            if (node.getParent()==null){System.out.println("isRoot");
-                if (node.getRight().getElement()!=null){
-                    System.out.println(node.getRight().getElement());
+    public Object getResult(TreeNode tree){
+        if (tree.getLeft()==null && tree.getRight()==null){
+             return Double.valueOf(tree.getElement().toString());
+        }
+        else{
+           Object left = getResult(tree.getLeft());
+           Object right =  getResult(tree.getRight());
+            for (Operation anOper : oper) {
+                if (anOper.getSymbol().equals(tree.getElement().toString())) {
+                    return anOper.evaluate((Double) left, (Double) right);
                 }
-
             }
         }
+        return null;
     }
-enum Operators {
-    SUM{
-       public String toString(){
-           return "+";
-       }
-    },
-    MULTIPL{
-        public String toString(){
-            return "*";
-        }
-    },
-    SUB,
-    DIV;
 
 
-}
 }

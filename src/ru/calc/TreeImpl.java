@@ -62,8 +62,13 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
 
     @Override
     public TreeNode getRoot() {
-        int i=0;
 
+        for (int i=0; i<size; i++){
+            TreeNode tr = (TreeNode) elementData[i];
+            if (tr.getParent() == null){
+                root = new TreeNode();
+                root = tr;             }
+        }
         return root;
     }
 
