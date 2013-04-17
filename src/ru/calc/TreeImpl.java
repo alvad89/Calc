@@ -1,9 +1,6 @@
 package ru.calc;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -159,7 +156,9 @@ public class TreeImpl extends AbstractList<TreeNode> implements TreeInspectable<
             // minCapacity is usually close to size, so this is a win:
             elementData = Arrays.copyOf(elementData, newCapacity);
         }
-    }}
+    }
+
+}
 
 
 

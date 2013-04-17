@@ -30,7 +30,6 @@ public class OperationImpl{
         oper.add(new Summ());
         oper.add(new Sub());
         oper.add(new Mult());
-
         oper.add(new Div());
     }
     public void operat(String[] args){
@@ -61,7 +60,7 @@ public class OperationImpl{
         tree.addNode(five); */
 
 
-        //Распарсили строчку. каждый символ по отдельности!
+
         Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = three.matcher(st.get(0));
 
@@ -74,14 +73,9 @@ public class OperationImpl{
 
         System.out.println(createOPN(sstr));
         tree = createTree(createOPN(sstr));
-
-
-      //System.out.println(tree);
         for (int  i =0 ; i<tree.size(); i++){
            System.out.println(tree.get(i).getElement()+" nom "+ i);
         }
-      // System.out.println(tree.get(4).getParent().getParent().getLeft().getElement());
-       //System.out.println(tree.get(1).getParent().getRight().getRight().getElement());
 
         root = tree.getRoot();
         System.out.println(getResult(root));
@@ -100,18 +94,34 @@ public class OperationImpl{
         if (!last.find()){
             left = new TreeNode(input.getLast().toString(),null,null, root);
             root.setLeft(left);
-            tree.addNode(root);
+            //tree.addNode(root);
             tree.addNode(left);
             input.removeLast();
-        }
-            for (int i=input.size()-1; i>=0; i--){
+        } else {
+            parent = new TreeNode(input.getLast().toString(), parent);
+            input.removeLast();
+            //TreeImpl treeNodes = createTree(input);
+            //for (TreeNode tr: treeNodes){
+                //tree.addNode(tr);
+                left = new TreeNode(input.getLast().toString(),null,null,parent);
+                parent.setLeft(left);
+                input.removeLast();
+                right = new TreeNode(input.getLast().toString(),null,null,parent);
+                parent.setRight(right);
+                input.removeLast();
+                tree.addNode(left);
+                tree.addNode(right);
+                tree.addNode(parent);
+           // }
+
+           /* for (int i=input.size()-1; i>=0; i--){
                 Matcher match = op.matcher(input.get(i).toString());
                 if (match.find()){
                     parent = new TreeNode(input.get(i).toString(),null);
                     if (i==input.size()-1){
                     root.setRight(parent);
                     parent.setParent(root);
-                    //tree.addNode(root);
+                    tree.addNode(root);
                     }
                     left = new TreeNode(input.get(i-1).toString(),null, null, parent);
                     right = new TreeNode(input.get(i-2).toString(),null,null,parent);
@@ -125,7 +135,7 @@ public class OperationImpl{
                     left = new TreeNode(input.get(i).toString(),null,null,parent);
                     parent.setLeft(left);
                     tree.addNode(left);
-                }
+                }*/
 
         /*if (match.find()){
             parent = new TreeNode(input.get(i).toString().charAt(0), parent);
@@ -176,9 +186,7 @@ public class OperationImpl{
            Object right =  getResult(tree.getRight());
             for (Operation anOper : oper) {
                 if (anOper.getSymbol().equals(tree.getElement().toString())) {
-                    Object o = anOper.evaluate((Double) left, (Double) right);
-                    tree.setElement(o);
-                    return o;
+                    return anOper.evaluate((Double) left, (Double) right);
                 }
             }
         }
