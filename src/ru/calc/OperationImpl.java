@@ -22,13 +22,15 @@ import java.util.regex.Pattern;
 
 public class OperationImpl{
     private LinkedList<Operation> oper = null;
-    private TreeNode root;
+    private Pattern op = Pattern.compile("[\\- + * ^ /]", Pattern.CASE_INSENSITIVE);
+    TreeNode root;
     public OperationImpl(){
         super();
         oper = new LinkedList<Operation>();
         oper.add(new Summ());
-        oper.add(new Mult());
         oper.add(new Sub());
+        oper.add(new Mult());
+
         oper.add(new Div());
     }
     public void operat(String[] args){
@@ -43,10 +45,9 @@ public class OperationImpl{
 
         }
         LinkedList<String> sstr = new LinkedList<String>();
-
         TreeImpl tree = new TreeImpl();
 
-        TreeNode first = new TreeNode('-',null);
+    /*    TreeNode first = new TreeNode('-',null);
         TreeNode second = new TreeNode("6",null, null,first);
         TreeNode thrid = new TreeNode('/', first);
         TreeNode four = new TreeNode("12",null,null,thrid);
@@ -57,16 +58,12 @@ public class OperationImpl{
         tree.addNode(second);
         tree.addNode(thrid);
         tree.addNode(four);
-        tree.addNode(five);
+        tree.addNode(five); */
 
 
         //Распарсили строчку. каждый символ по отдельности!
         Pattern three = Pattern.compile("\\s*(\\d+\\.?\\d*(e[+-]?)?\\d*\\s*)|[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
-        Pattern operand = Pattern.compile("(\\- +)(\\* / \\( \\))",Pattern.CASE_INSENSITIVE);
-        Pattern numeric = Pattern.compile("[0-9]", Pattern.CASE_INSENSITIVE);
-
         Matcher matcher = three.matcher(st.get(0));
-      //  Matcher matcherOperand = operand.matcher(st.get(0));
 
         while (matcher.find()){
             int startnumb = matcher.start();
@@ -75,65 +72,62 @@ public class OperationImpl{
             sstr.add(s);
               }
 
-        int previous =0;
-        LinkedList<String> expr = new LinkedList<String>();
-        char[] chars = st.get(0).toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            Character aChar = chars[i];
-            expr.add(aChar.toString());
-            Matcher matcherNumb = three.matcher(aChar.toString());
-            if (matcherNumb.matches()){
-                if ((i-previous)>1){
-                    previous=i;
-                }
-            }
-        }
-        //createOPN(sstr);
-       // System.out.println(sstr);
+        System.out.println(createOPN(sstr));
         tree = createTree(createOPN(sstr));
 
-      /*  for (int i = 0; i<sstr.size(); i++) {
-             Matcher numb = numeric.matcher(sstr.get(i));
-            Matcher ololo = operand.matcher(sstr.get(i));
-            System.out.println(ololo.groupCount());
-
-            if (numb.find())
-            {
-                tree.addNode(new TreeNode(sstr.get(i),null));
-                System.out.println(sstr.get(i));
-            }
-            else System.out.println(sstr.get(i));
-
-
-        } */
-      //  System.out.println(tree.get(3).getParent().getLeft().getElement());
 
       //System.out.println(tree);
         for (int  i =0 ; i<tree.size(); i++){
-      //     System.out.println(tree.get(i).getElement()+" nom "+ i);
-
+           System.out.println(tree.get(i).getElement()+" nom "+ i);
         }
       // System.out.println(tree.get(4).getParent().getParent().getLeft().getElement());
        //System.out.println(tree.get(1).getParent().getRight().getRight().getElement());
 
-       // root = tree.getRoot();
-       // System.out.println(getResult(root));
+        root = tree.getRoot();
+        System.out.println(getResult(root));
 }
 
     public TreeImpl createTree(LinkedList input){
         TreeImpl tree = new TreeImpl();
-        TreeNode oldParent = new TreeNode();
         TreeNode parent= new TreeNode(null,null);
-        TreeNode root = new TreeNode();
-        TreeNode left = new TreeNode();
-        TreeNode right = new TreeNode();
-        Pattern hightPriority = Pattern.compile("[\\* / ]", Pattern.CASE_INSENSITIVE);
-        Pattern lowPriority = Pattern.compile("[-+]", Pattern.CASE_INSENSITIVE);
-        int previous = 0;
-        for (int i =0; i<input.size(); i++){
-            Matcher match = hightPriority.matcher(input.get(i).toString());
-            Matcher low = lowPriority.matcher(input.get(i).toString());
-        if (match.find()){
+        TreeNode root = new TreeNode(input.getLast(),null);
+        tree.addNode(root);
+        input.removeLast();
+        TreeNode left; //= new TreeNode();
+        TreeNode right;// = new TreeNode();
+
+        Matcher last = op.matcher(input.getLast().toString());
+        if (!last.find()){
+            left = new TreeNode(input.getLast().toString(),null,null, root);
+            root.setLeft(left);
+            tree.addNode(root);
+            tree.addNode(left);
+            input.removeLast();
+        }
+            for (int i=input.size()-1; i>=0; i--){
+                Matcher match = op.matcher(input.get(i).toString());
+                if (match.find()){
+                    parent = new TreeNode(input.get(i).toString(),null);
+                    if (i==input.size()-1){
+                    root.setRight(parent);
+                    parent.setParent(root);
+                    //tree.addNode(root);
+                    }
+                    left = new TreeNode(input.get(i-1).toString(),null, null, parent);
+                    right = new TreeNode(input.get(i-2).toString(),null,null,parent);
+                    parent.setLeft(left); parent.setRight(right);
+                    tree.addNode(parent);
+                    tree.addNode(left);
+                    tree.addNode(right);
+                    i = i-2;
+                }
+                else {
+                    left = new TreeNode(input.get(i).toString(),null,null,parent);
+                    parent.setLeft(left);
+                    tree.addNode(left);
+                }
+
+        /*if (match.find()){
             parent = new TreeNode(input.get(i).toString().charAt(0), parent);
             left = new TreeNode(Double.valueOf(input.get(i-1).toString()),null,null, parent);
             right = new TreeNode(Double.valueOf(input.get(i + 1).toString()), null,null, parent);
@@ -166,9 +160,10 @@ public class OperationImpl{
                     tree.addNode(right);
                 }
             }
-        }
+        }*/
 
-        }
+            }
+
         return tree;
 
     }
@@ -181,7 +176,9 @@ public class OperationImpl{
            Object right =  getResult(tree.getRight());
             for (Operation anOper : oper) {
                 if (anOper.getSymbol().equals(tree.getElement().toString())) {
-                    return anOper.evaluate((Double) left, (Double) right);
+                    Object o = anOper.evaluate((Double) left, (Double) right);
+                    tree.setElement(o);
+                    return o;
                 }
             }
         }
@@ -192,11 +189,14 @@ public class OperationImpl{
         LinkedList<String> operator = new LinkedList<String>();
         Iterator operIterat = oper.iterator();
         Pattern numeric = Pattern.compile("[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
-        Pattern op = Pattern.compile("[\\- + * ^ /]", Pattern.CASE_INSENSITIVE);
+        if (str.get(0).equals("-")){
+            str.addFirst("0");
+        }
             for (int i=0; i<str.size(); i++){
                 Matcher matc = numeric.matcher(str.get(i));
                 Matcher matchOper = op.matcher(str.get(i));
                 if (matc.find()){
+
                      if (str.get(i).equals("(")){
                          operator.add(str.get(i));
                      }
@@ -207,23 +207,27 @@ public class OperationImpl{
                          }
                          operator.removeLast();
                      }
+
                     else if (matchOper.find()){
-                         if (operator.size()==0) operator.add(str.get(i));
-                         else if (getPriority(str.get(i))<getPriority(operator.getLast())){
+                         if (operator.isEmpty()) {operator.add(str.get(i));}
+                         else if (getPriority(str.get(i))>getPriority(operator.getLast())){
                              operator.add(str.get(i));
                          } else {
-                             while ((getPriority(str.get(i))>=getPriority(operator.getLast())) && (operator.isEmpty())){
+                             boolean flag = !operator.isEmpty();
+                             while (flag){
+                                 if (getPriority(str.get(i))<=getPriority(operator.getLast()))
                                  result.add(operator.getLast());
                                  operator.removeLast();
+                                 flag = false;
                              }
                              operator.add(str.get(i));
                          }
-
                 }}
                 else {
                     result.add(str.get(i));
                 }
             }
+
         while (operator.size()>0){
             result.add(operator.getLast());
             operator.removeLast();
@@ -232,10 +236,12 @@ public class OperationImpl{
         return result;
     }
     public int getPriority(String s){
+        int i=0;
         Iterator<Operation> operIterat = oper.iterator();
         while (operIterat.hasNext()){
             if (operIterat.next().getSymbol().equals(s)){
-                return operIterat.next().getPriority();
+                i= operIterat.next().getPriority();
+                return i;
             }
         }
         return 0;
