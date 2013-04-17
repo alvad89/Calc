@@ -19,4 +19,9 @@ public class Mult implements Operation {
     public Double evaluate(double a, double b) {
         return a*b;
     }
+
+    @Override
+    public int getPriority() {
+        return 2;
+    }
 }

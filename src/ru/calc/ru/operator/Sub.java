@@ -12,11 +12,16 @@ import ru.calc.Operation;
 public class Sub implements Operation {
     @Override
     public String getSymbol() {
-        return "/";
+        return "-";
     }
 
     @Override
     public Double evaluate(double a, double b) {
-        return a/b;
+        return a-b;
+    }
+
+    @Override
+    public int getPriority() {
+        return 1;
     }
 }

@@ -10,4 +10,5 @@ package ru.calc;
 public interface Operation {
     public String getSymbol();
     public Double evaluate(double a, double b);
+    public int getPriority();
 }

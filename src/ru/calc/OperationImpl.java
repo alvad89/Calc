@@ -88,8 +88,9 @@ public class OperationImpl{
                 }
             }
         }
-        System.out.println(sstr);
-        tree = createTree(sstr);
+        //createOPN(sstr);
+       // System.out.println(sstr);
+        tree = createTree(createOPN(sstr));
 
       /*  for (int i = 0; i<sstr.size(); i++) {
              Matcher numb = numeric.matcher(sstr.get(i));
@@ -107,17 +108,16 @@ public class OperationImpl{
         } */
       //  System.out.println(tree.get(3).getParent().getLeft().getElement());
 
-      System.out.println(tree);
+      //System.out.println(tree);
         for (int  i =0 ; i<tree.size(); i++){
-           System.out.println(tree.get(i).getElement()+" nom "+ i);
+      //     System.out.println(tree.get(i).getElement()+" nom "+ i);
 
         }
       // System.out.println(tree.get(4).getParent().getParent().getLeft().getElement());
        //System.out.println(tree.get(1).getParent().getRight().getRight().getElement());
 
-
        // root = tree.getRoot();
-      //  System.out.println(getResult(root));
+       // System.out.println(getResult(root));
 }
 
     public TreeImpl createTree(LinkedList input){
@@ -186,6 +186,59 @@ public class OperationImpl{
             }
         }
         return null;
+    }
+    public LinkedList<String> createOPN(LinkedList<String> str){
+        LinkedList<String> result = new LinkedList<String>();
+        LinkedList<String> operator = new LinkedList<String>();
+        Iterator operIterat = oper.iterator();
+        Pattern numeric = Pattern.compile("[\\- + * ^ / \\( \\)]", Pattern.CASE_INSENSITIVE);
+        Pattern op = Pattern.compile("[\\- + * ^ /]", Pattern.CASE_INSENSITIVE);
+            for (int i=0; i<str.size(); i++){
+                Matcher matc = numeric.matcher(str.get(i));
+                Matcher matchOper = op.matcher(str.get(i));
+                if (matc.find()){
+                     if (str.get(i).equals("(")){
+                         operator.add(str.get(i));
+                     }
+                    else if (str.get(i).equals(")")){
+                         while (!operator.getLast().equals("(")){
+                             result.add(operator.getLast());
+                             operator.removeLast();
+                         }
+                         operator.removeLast();
+                     }
+                    else if (matchOper.find()){
+                         if (operator.size()==0) operator.add(str.get(i));
+                         else if (getPriority(str.get(i))<getPriority(operator.getLast())){
+                             operator.add(str.get(i));
+                         } else {
+                             while ((getPriority(str.get(i))>=getPriority(operator.getLast())) && (operator.isEmpty())){
+                                 result.add(operator.getLast());
+                                 operator.removeLast();
+                             }
+                             operator.add(str.get(i));
+                         }
+
+                }}
+                else {
+                    result.add(str.get(i));
+                }
+            }
+        while (operator.size()>0){
+            result.add(operator.getLast());
+            operator.removeLast();
+        }
+
+        return result;
+    }
+    public int getPriority(String s){
+        Iterator<Operation> operIterat = oper.iterator();
+        while (operIterat.hasNext()){
+            if (operIterat.next().getSymbol().equals(s)){
+                return operIterat.next().getPriority();
+            }
+        }
+        return 0;
     }
 
 

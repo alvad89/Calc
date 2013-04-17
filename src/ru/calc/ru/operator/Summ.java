@@ -18,4 +18,9 @@ public class Summ implements Operation {
     public Double evaluate(double a, double b) {
         return a+b;
     }
+
+    @Override
+    public int getPriority() {
+        return 1;
+    }
 }
